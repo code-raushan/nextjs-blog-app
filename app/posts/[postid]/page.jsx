@@ -2,6 +2,14 @@ import Link from "next/link";
 import { getSortedPostsData, getPostData } from "@/lib/posts";
 import { notFound } from "next/navigation";
 import getFormattedDate from "@/lib/getFormattedDate";
+
+export function generateStaticParams(){
+  const posts = getSortedPostsData() //deduped
+  return posts.map((post)=>{
+    postid: post.id
+  })
+}
+
 export function generateMetadata({ params }) {
   const posts = getSortedPostsData();
   const { postid } = params;
@@ -25,8 +33,8 @@ export default async function Post({ params }) {
   const { title, date, contentHTML } = await getPostData(postid);
   const pubDate = getFormattedDate(date);
   return (
-    <main className="px-6 prose prose-xl prose-slate dark:prose-invert mx-auto">
-      <h1 className="text-2xl mt-4 mb-0">
+    <main className="px-6 prose prose-lg prose-slate dark:prose-invert mx-auto">
+      <h1 className="text-lg mt-4 mb-0">
         <p className="mt-0">{pubDate}</p>
         <article>
           <section dangerouslySetInnerHTML={{ __html: contentHTML }} />
